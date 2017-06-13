@@ -1,0 +1,45 @@
+---
+# tasks file for docker-vcc
+
+- name: get Squid Docker image
+  docker_image:
+    name:  sameersbn/squid
+
+- name: start Squid-proxy container
+  docker_container:
+    name: squid
+    image:  sameersbn/squid
+    #env:
+    state: started
+    network_mode: bridge
+    networks:
+      - name: "{{ vl_vcdn_mgmt }}"
+        aliases:
+          - son-mgmt
+      - name: "{{ vl_vcdn_enduser }}"
+        aliases:
+          - son-vcdn-enduser
+      - name: "{{ vl_vtu_vcc }}"
+        aliases:
+          - vtu-vcc
+        links:
+          - vtu-vcc:trancoder-cache
+      - name: "{{ vl_vtc_vcc }}"
+        aliases:
+          - vtc-vcc
+        links:
+          - vtc-vcc:coordinator-cache
+    restart_policy: "unless-stopped"
+    published_ports:
+     - 3128:3128
+     - 3129:3129
+    volumes:
+      - /var/log/sonata/squid:/var/log/squid
+    log_driver: syslog # gelf
+
+    #log_options:
+    #  syslog-address: tcp://my-syslog-server:514
+    #  syslog-facility: daemon
+
+- wait_for: host=0.0.0.0 port=3128 timeout=30 delay=10 state=started
+

@@ -1,0 +1,4 @@
+---
+# vars file for squid
+public_ip: 172.31.6.110
+squid_fqdn: squid-alabs-demo-xenial-1497364157

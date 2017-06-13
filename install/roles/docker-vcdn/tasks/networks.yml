@@ -1,0 +1,30 @@
+- name: Docker User Defined Network (vCDN MGMT)
+  shell: 'docker network create --driver=bridge \
+--subnet=172.21.111.0/24 --gateway=172.21.111.1 \
+--ip-range=172.21.111.128/25 "{{ vl_vcdn_mgmt }}"'
+
+- name: Docker User Defined Network (vTC - vCC)
+  shell: 'docker network create --driver=bridge \
+--subnet=172.21.117.0/24 --gateway=172.21.117.1 \
+--ip-range=172.21.117.128/25 "{{ vl_vtc_vcc }}"'
+
+- name: Docker User Defined Network (vTC - vTU)
+  shell: 'docker network create --driver=bridge \
+--subnet=172.21.118.0/24 --gateway=172.21.118.1 \
+--ip-range=172.21.118.128/25 "{{ vl_vtc_vtu }}"'
+
+- name: Docker User Defined Network (vTU -vCC)
+  shell: 'docker network create --driver=bridge \
+--subnet=172.21.119.0/24 --gateway=172.21.119.1 \
+--ip-range=172.21.119.128/25 "{{ vl_vtu_vcc }}"'
+
+- name: Docker User Defined Network (vTU - SOURCE_CONTENT)
+  shell: 'docker network create --driver=bridge \
+--subnet=172.21.121.0/24 --gateway=172.21.121.1 \
+--ip-range=172.21.121.128/25 "{{ vl_vtu_src }}"'
+
+- name: Docker User Defined Network (vCDN END USER)
+  shell: 'docker network create --driver=bridge \
+--subnet=172.21.112.0/24 --gateway=172.21.112.1 \
+--ip-range=172.21.112.128/25 "{{ vl_vcdn_enduser }}"'
+

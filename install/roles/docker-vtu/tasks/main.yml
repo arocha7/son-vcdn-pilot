@@ -1,0 +1,51 @@
+---
+# tasks file for docker-vtu
+
+#- name: Docker User Defined Network (vTC - vTU)
+#  shell: 'docker network create --driver=bridge \
+#--subnet=172.21.118.0/24 --gateway=172.21.118.1 \
+#--ip-range=172.21.118.128/25 "{{ vl_vtc_vtu }}"'
+
+#- name: Docker User Defined Network (vTU -vCC)
+#  shell: 'docker network create --driver=bridge \
+#--subnet=172.21.119.0/24 --gateway=172.21.119.1 \
+#--ip-range=172.21.119.128/25 "{{ vl_vtu_vcc }}"'
+
+#- name: Docker User Defined Network (vTU - SOURCE_CONTENT)
+#  shell: 'docker network create --driver=bridge \
+#--subnet=172.21.121.0/24 --gateway=172.21.121.1 \
+#--ip-range=172.21.121.128/25 "{{ vl_vtu_src }}"'
+
+- name: get vTU Docker image
+  docker_image:
+    name: livemediastreamer/immersia-server
+
+- name: start vTU Docker container
+  docker_container:
+
+    name: vtu
+    image: livemediastreamer/immersia-server
+    #env:
+    state: started
+    network_mode: bridge
+    networks:
+      - name: "{{ vl_vcdn_mgmt }}"
+        aliases:
+          - vcdn-mgmt
+      - name: "{{ vl_vtc_vtu }}"
+        aliases:
+          - vtc-vtu
+      - name: "{{ vl_vtu_vcc }}"
+        aliases:
+          - vtu-vcc
+      - name: "{{ vl_vtu_src }}"
+        aliases:
+          - vtu-src
+    published_ports:
+      - 8080:8080
+      - 8083:8083
+    volumes:
+      - /var/log/sonata/vtu:/var/log/vtu
+
+- wait_for: host=0.0.0.0 port=8080 timeout=30 delay=10 state=started
+

@@ -1,0 +1,9 @@
+---
+# defaults file for docker-vcc
+
+vl_vcdn_mgmt: vcdn-mgmt
+vl_vtc_vtu: vtc-vtu
+vl_vtc_vcc: vtc-vcc
+vl_vtu_vcc: vtu-vcc
+vl_vtu_src: vtu-src
+vl_vcdn_enduser: vcdn-enduser

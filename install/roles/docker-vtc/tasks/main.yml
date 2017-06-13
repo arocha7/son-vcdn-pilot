@@ -1,0 +1,44 @@
+---
+# tasks file for docker-vtc
+
+#- name: Docker User Defined Network (vTC INGRESS)
+#  shell: 'docker network create --driver=bridge \
+#--subnet=172.21.116.0/24 --gateway=172.21.116.1 \
+#--ip-range=172.21.116.128/25 "{{ docker_vtc_in }}"'
+
+#- name: Docker User Defined Network (vTC OUTGRESS)
+#  shell: 'docker network create --driver=bridge \
+#--subnet=172.21.117.0/24 --gateway=172.21.117.1 \
+#--ip-range=172.21.117.128/25 "{{ docker_vtc_out }}"'
+
+- name: get vTC Docker image
+  docker_image:
+    name: sonatanfv/sonata-vtc-vnf
+
+- name: start vTC Docker container
+  docker_container:
+
+    name: vtc
+    image: sonatanfv/sonata-vtc-vnf
+    #env:
+    state: started
+    network_mode: bridge
+    networks:
+      - name: "{{ vl_vcdn_mgmt }}"
+        aliases:
+          - son-mgmt
+      - name: "{{ vl_vcdn_enduser }}"
+        aliases:
+          - son-vcdn-enduser
+      - name: "{{ vl_vtc_vtu }}"
+        aliases:
+          - son-vtc-vtu
+      - name: "{{ vl_vtc_vcc }}"
+        aliases:
+          - son-vtc-vcc
+#    published_ports: 8081:8081 # TO BE CHANGED
+    volumes:
+      - /var/log/sonata/vtc:/var/log/vtc
+
+#- wait_for: host=0.0.0.0 port=8081 timeout=30 delay=10 state=started
+

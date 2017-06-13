@@ -1,0 +1,2 @@
+[squid]
+squid-alabs-demo-xenial-1497364157 ansible_connection=ssh ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/.ssh/son-install.pem ansible_host=172.31.6.110 
